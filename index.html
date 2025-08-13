@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Matrix Login</title>
+  <style>
+    /* Full screen, black bg, no scroll */
+    html, body {
+      margin: 0; padding: 0; height: 100%; overflow: hidden;
+      background: black;
+      font-family: monospace, monospace;
+      color: #00ff00;
+    }
+
+    /* Canvas fills entire screen */
+    canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      display: block;
+    }
+
+   /* Center box */
+.login-box {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid #00ff00;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 0 20px #00ff00;
+  width: 70%;
+  max-width: 400px;
+  text-align: center;
+  z-index: 1;
+  color: #00ff00;
+}
+
+    .login-box h2 {
+      margin-bottom: 10px;
+      font-weight: normal;
+    }
+
+    input[type="password"] {
+      width: 100%;
+      padding: 12px 40px 12px 12px;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: 1px solid #00ff00;
+      background: black;
+      color: #00ff00;
+      outline: none;
+      box-sizing: border-box;
+    }
+
+    .eye-icon {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 1.2rem;
+      color: #00ff00;
+      user-select: none;
+    }
+
+    .input-wrapper {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+
+    button {
+      background: #00ff00;
+      border: none;
+      padding: 12px;
+      width: 80%;
+      font-weight: bold;
+      font-size: 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      color: black;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #00cc00;
+    }
+
+    #error-msg {
+      color: red;
+      margin-top: 1rem;
+      display: none;
+    }
+
+    #whatsapp-contact {
+      display: none;
+      margin-top: 1rem;
+      background-color: aqua;
+      color: blue;
+      padding: 10px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: bold;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="matrix"></canvas>
+
+  <div class="login-box">
+    <h2>🔐 Enter Password</h2>
+    <div class="input-wrapper">
+      <input
+        type="password"
+        id="password"
+        placeholder="enter password"
+        autocomplete="off"
+      />
+      <span class="eye-icon" id="togglePassword">🤓</span>
+    </div>
+    <button id="loginBtn">Login</button>
+    <p id="error-msg">❌ Wrong password. Try again.</p>
+    <a
+      id="whatsapp-contact"
+      href="https://wa.me/923305153963?text=Salam%20bro%2C%20I%20want%20access%20to%20premium%20content"
+      target="_blank"
+      rel="noopener"
+      >📞 Contact Admin (WhatsApp)</a
+    >
+  </div>
+
+  <body style="margin:0;overflow:hidden;background:black;">
+  <canvas id="matrix"></canvas>
+  <script>
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
+
+    // Make canvas full screen
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const letters = "アァイィウヴエエオカキクケコサシスセソタチツテトナニヌネノABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+
+    const drops = Array(Math.floor(columns)).fill(1);
+
+    function draw() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "#0F0";
+      ctx.font = fontSize + "px monospace";
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = letters.charAt(Math.floor(Math.random() * letters.length));
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+
+    setInterval(draw, 33);
+
+   // Password toggle
+const togglePass = document.getElementById("togglePassword");
+const passwordInput = document.getElementById("password");
+
+// Load saved password if exists
+const savedPassword = localStorage.getItem("matrix_pass");
+if (savedPassword) {
+  passwordInput.value = savedPassword;
+}
+
+// Eye toggle
+togglePass.addEventListener("click", () => {
+  passwordInput.type =
+    passwordInput.type === "password" ? "text" : "password";
+});
+
+// Login logic
+const loginBtn = document.getElementById("loginBtn");
+const errorMsg = document.getElementById("error-msg");
+const whatsappContact = document.getElementById("whatsapp-contact");
+
+loginBtn.addEventListener("click", () => {
+  const pass = passwordInput.value.trim();
+  if (pass === "hiddenxlegend") {
+    localStorage.setItem("matrix_pass", pass); // ✅ Save correct password
+    window.location.href = "home.html";
+  } else {
+    localStorage.removeItem("matrix_pass"); // ❌ Don't save wrong password
+    errorMsg.style.display = "block";
+    whatsappContact.style.display = "inline-block";
+  }
+});
+
+// Optional: Enter key submits form
+passwordInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") loginBtn.click();
+});
+   
+
+    // Optional: Enter key submits form
+    passwordInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") loginBtn.click();
+    });
+  </script>
+</body>
+</html>
