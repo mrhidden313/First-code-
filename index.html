@@ -195,7 +195,7 @@ loginBtn.addEventListener("click", () => {
   const pass = passwordInput.value.trim();
   if (pass === "hiddenxlegend") {
     localStorage.setItem("matrix_pass", pass); // ✅ Save correct password
-    window.location.href = "net-one-bice.vercel.app";
+    window.location.href = "https://net-one-bice.vercel.app/";
   } else {
     localStorage.removeItem("matrix_pass"); // ❌ Don't save wrong password
     errorMsg.style.display = "block";
